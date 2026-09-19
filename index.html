@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pokémon TCG Tournament</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="container nav">
+        <div>
+            <h1 id="tournamentName">Pokémon TCG Tournament</h1>
+            <span id="tournamentLocation">Carregando...</span>
+        </div>
+
+        <div class="nav-actions">
+            <button id="btnLogin" class="btn secondary" onclick="showSection('loginSection')">
+                Entrar
+            </button>
+
+            <button id="btnAccount" class="btn secondary hidden" onclick="showSection('accountSection')">
+                Minha inscrição
+            </button>
+
+            <button id="btnLogout" class="btn danger hidden" onclick="logout()">
+                Sair
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<main>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+
+            <div class="hero-content">
+
+                <span class="badge">POKÉMON TCG</span>
+
+                <h2 id="heroTitle">
+                    Torneio Pokémon TCG
+                </h2>
+
+                <p class="hero-description">
+                    Inscreva-se no torneio, envie seu comprovante de pagamento
+                    e prepare sua decklist.
+                </p>
+
+                <div class="event-info">
+
+                    <div class="info-box">
+                        <strong>📅 Data</strong>
+                        <span id="tournamentDate">Carregando...</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>📍 Local</strong>
+                        <span id="tournamentPlace">Carregando...</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>💰 Inscrição</strong>
+                        <span id="tournamentPrice">Carregando...</span>
+                    </div>
+
+                </div>
+
+                <button class="btn primary large" onclick="startRegistration()">
+                    Quero me inscrever
+                </button>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- LOGIN -->
+    <section id="loginSection" class="section hidden">
+        <div class="container small-container">
+
+            <div class="card">
+
+                <h2>Entrar</h2>
+
+                <p class="muted">
+                    Acesse sua inscrição para acompanhar o pagamento e sua decklist.
+                </p>
+
+                <form id="loginForm">
+
+                    <label for="loginEmail">E-mail</label>
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        required
+                        autocomplete="email"
+                    >
+
+                    <label for="loginPassword">Senha</label>
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        required
+                        autocomplete="current-password"
+                    >
+
+                    <button type="submit" class="btn primary full">
+                        Entrar
+                    </button>
+
+                </form>
+
+                <button
+                    class="link-button"
+                    onclick="showSection('registerSection')"
+                >
+                    Ainda não tenho cadastro
+                </button>
+
+                <button
+                    class="link-button"
+                    onclick="resetPassword()"
+                >
+                    Esqueci minha senha
+                </button>
+
+                <p id="loginMessage" class="message"></p>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- CADASTRO -->
+    <section id="registerSection" class="section hidden">
+
+        <div class="container small-container">
+
+            <div class="card">
+
+                <h2>Inscrição</h2>
+
+                <p class="muted">
+                    Preencha seus dados para participar do torneio.
+                </p>
+
+                <form id="registerForm">
+
+                    <label for="name">
+                        Nome completo
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        required
+                        autocomplete="name"
+                    >
+
+
+                    <label for="nickname">
+                        Nickname
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nickname"
+                        placeholder="Como você quer aparecer na lista?"
+                        required
+                    >
+
+
+                    <label for="pokemonPlayerId">
+                        Pokémon Player ID
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pokemonPlayerId"
+                        placeholder="Ex.: 123456"
+                        required
+                    >
+
+                    <small class="help">
+                        Não sabe seu Player ID?
+                        <a
+                            href="https://www.pokemon.com/us/play-pokemon/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Saiba como encontrar
+                        </a>
+                    </small>
+
+
+                    <label for="whatsapp">
+                        WhatsApp
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="whatsapp"
+                        placeholder="(84) 99999-9999"
+                        required
+                    >
+
+
+                    <label for="email">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        autocomplete="email"
+                    >
+
+
+                    <label for="password">
+                        Senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        minlength="6"
+                        required
+                        autocomplete="new-password"
+                    >
+
+
+                    <label for="passwordConfirm">
+                        Confirmar senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="passwordConfirm"
+                        minlength="6"
+                        required
+                        autocomplete="new-password"
+                    >
+
+
+                    <button type="submit" class="btn primary full">
+                        Criar inscrição
+                    </button>
+
+                </form>
+
+                <p id="registerMessage" class="message"></p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTA -->
+    <section id="accountSection" class="section hidden">
+
+        <div class="container">
+
+            <div class="section-header">
+                <span class="badge">MINHA INSCRIÇÃO</span>
+
+                <h2>Área do jogador</h2>
+
+                <p>
+                    Acompanhe sua inscrição, pagamento e decklist.
+                </p>
+            </div>
+
+
+            <div class="account-grid">
+
+                <!-- DADOS -->
+                <div class="card">
+
+                    <h3>👤 Seus dados</h3>
+
+                    <div class="data-row">
+                        <span>Nome</span>
+                        <strong id="accountName">-</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Nickname</span>
+                        <strong id="accountNickname">-</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Player ID</span>
+                        <strong id="accountPlayerId">-</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>WhatsApp</span>
+                        <strong id="accountWhatsapp">-</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>E-mail</span>
+                        <strong id="accountEmail">-</strong>
+                    </div>
+
+                </div>
+
+
+                <!-- PAGAMENTO -->
+                <div class="card">
+
+                    <h3>💳 Pagamento</h3>
+
+                    <p class="muted">
+                        Faça o pagamento via PIX e envie o comprovante.
+                    </p>
+
+                    <div class="pix-box">
+
+                        <span>Chave PIX</span>
+
+                        <strong id="pixKey">
+                            Carregando...
+                        </strong>
+
+                        <button
+                            class="btn secondary small"
+                            onclick="copyPix()"
+                        >
+                            Copiar PIX
+                        </button>
+
+                    </div>
+
+                    <div class="payment-status">
+                        <span>Status</span>
+
+                        <span
+                            id="paymentStatus"
+                            class="status pending"
+                        >
+                            PENDENTE
+                        </span>
+                    </div>
+
+
+                    <label for="paymentProof">
+                        Comprovante de pagamento
+                    </label>
+
+                    <input
+                        type="file"
+                        id="paymentProof"
+                        accept="image/*,.pdf"
+                    >
+
+                    <button
+                        class="btn primary full"
+                        onclick="uploadPaymentProof()"
+                    >
+                        Enviar comprovante
+                    </button>
+
+                    <p id="paymentMessage" class="message"></p>
+
+                </div>
+
+
+                <!-- DECKLIST -->
+                <div class="card">
+
+                    <h3>🃏 Decklist</h3>
+
+                    <p class="muted">
+                        Sua decklist será privada e poderá ser visualizada
+                        apenas por você e pelos administradores.
+                    </p>
+
+                    <div id="deckStatus" class="status pending">
+                        NÃO ENVIADA
+                    </div>
+
+                    <button
+                        class="btn primary full"
+                        onclick="openDeckBuilder()"
+                    >
+                        Montar decklist
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- JOGADORES -->
+    <section id="playersSection" class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <span class="badge">
+                    INSCRITOS
+                </span>
+
+                <h2>
+                    Jogadores inscritos
+                </h2>
+
+                <p>
+                    Confira quem já está participando do torneio.
+                </p>
+
+            </div>
+
+
+            <div class="search-box">
+
+                <input
+                    type="search"
+                    id="playerSearch"
+                    placeholder="Pesquisar jogador..."
+                >
+
+            </div>
+
+
+            <div id="playersList" class="players-list">
+
+                <div class="loading">
+                    Carregando jogadores...
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DECK BUILDER -->
+    <section id="deckSection" class="section hidden">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <button
+                    class="btn secondary"
+                    onclick="showSection('accountSection')"
+                >
+                    ← Voltar
+                </button>
+
+                <span class="badge">
+                    DECKLIST
+                </span>
+
+                <h2>
+                    Montar deck
+                </h2>
+
+                <p>
+                    Selecione exatamente 60 cartas para sua lista.
+                </p>
+
+            </div>
+
+
+            <div class="deck-builder">
+
+                <div class="card">
+
+                    <h3>Pesquisar cartas</h3>
+
+                    <input
+                        type="search"
+                        id="cardSearch"
+                        placeholder="Digite o nome da carta..."
+                    >
+
+                    <div id="cardResults" class="card-results">
+                        <p class="muted">
+                            A integração com o banco de cartas será adicionada
+                            na próxima etapa.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="deck-header">
+
+                        <div>
+                            <h3>Minha decklist</h3>
+
+                            <span id="deckCount">
+                                0 / 60 cartas
+                            </span>
+                        </div>
+
+                        <div
+                            id="deckCounter"
+                            class="deck-counter"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                    <div id="deckList">
+
+                        <p class="muted">
+                            Nenhuma carta adicionada.
+                        </p>
+
+                    </div>
+
+                    <button
+                        class="btn primary full"
+                        onclick="saveDeck()"
+                    >
+                        Salvar decklist
+                    </button>
+
+                    <p id="deckMessage" class="message"></p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <div class="container">
+
+        <p>
+            Pokémon TCG Tournament
+        </p>
+
+        <small>
+            Sistema de inscrições e decklists
+        </small>
+
+    </div>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
